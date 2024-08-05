@@ -58,3 +58,46 @@ body, html {
 .form-options .forgot-password:hover, .form-options .toggle-form:hover {
   text-decoration: underline;
 }
+  
+/* Existing styles... */
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Add responsive design if needed */
+  @media (max-width: 768px) {
+    .landing-page {
+      flex-direction: column;
+    }
+  
+    .left-side, .right-side {
+      width: 100%;
+      height: auto;
+    }
+  
+    .left-side {
+      display: none;
+    }
+  
+    .right-side {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      background-color: var(--background-green);
+    }
+  }
+  
+  .logo {
+    width: 240px;
+    height: auto;
+    margin-right: 0.5rem;
+  } 
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
