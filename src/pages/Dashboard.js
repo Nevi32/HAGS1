@@ -10,14 +10,23 @@ function Dashboard() {
   const { theme } = useContext(ThemeContext);
   const [memberCount, setMemberCount] = useState(0);
   const [groupCount, setGroupCount] = useState(0);
+  const [projectCount, setProjectCount] = useState(0);
   const [totalFinance, setTotalFinance] = useState(0);
 
   useEffect(() => {
     const loadData = () => {
       const members = getMembers();
       setMemberCount(members.length);
+      
       const uniqueGroups = new Set(members.map(member => member.groupName));
       setGroupCount(uniqueGroups.size);
+      
+      // Count the number of unique project IDs
+      const highestProjectId = members.reduce((max, member) => {
+        const currentId = parseInt(member.projectId, 10);
+        return currentId > max ? currentId : max;
+      }, 0);
+      setProjectCount(highestProjectId);
 
       // Calculate total finance from depositPaid and formFee
       const totalFinance = members.reduce((total, member) => {
@@ -42,7 +51,7 @@ function Dashboard() {
   const cards = [
     { title: 'Members', value: memberCount.toString(), change: '+6%', route: '/regmembers' },
     { title: 'Groups', value: groupCount.toString(), change: '-3%', route: '/groups' },
-    { title: 'Projects', value: '7', change: '+9%', route: '/projects' }, // This value is static for now
+    { title: 'Projects', value: projectCount.toString(), change: '+9%', route: '/projects' },
     { title: 'Finances', value: `Ksh ${totalFinance.toFixed(2)}`, change: '+3%', route: '/finances' }
   ];
 
