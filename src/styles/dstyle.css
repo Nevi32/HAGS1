@@ -12,7 +12,7 @@ body {
 }
 
 .dashboard.light {
-  background-color: white;
+  background-color: #f2f2f2; /* A softer shade of white */
   color: #495057;
 }
 
@@ -36,8 +36,8 @@ header {
 }
 
 .light header {
-  background-color: #f8f9fa;
-  border-bottom-color: #e9ecef;
+  background-color: #e0e0e0; /* A softer shade of white */
+  border-bottom-color: #d6d6d6;
 }
 
 .dark header {
@@ -142,7 +142,7 @@ h1 {
 }
 
 .light .card {
-  background-color: white;
+  background-color: #ffffff;
   border: 1px solid #e9ecef;
 }
 
@@ -164,6 +164,7 @@ h1 {
 .card .change {
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 
 .card .value {
@@ -173,7 +174,8 @@ h1 {
 }
 
 .card .title {
-  font-size: 0.875rem;
+  font-size: 1.3rem;
+  font-weight: bold;
   transition: color 0.3s;
 }
 
@@ -199,7 +201,7 @@ h1 {
 }
 
 .light .chart, .light .chart-small {
-  background-color: white;
+  background-color: #ffffff;
   border: 1px solid #e9ecef;
 }
 
@@ -224,7 +226,7 @@ h1 {
   }
 
   .light nav {
-    background-color: #f8f9fa;
+    background-color: #e0e0e0; /* A softer shade of white */
   }
 
   .dark nav {

@@ -1,0 +1,144 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.reg-members-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.reg-members-page.light {
+    background-color: #f0f0f0; /* Softer white background */
+    color: #495057;
+}
+
+.reg-members-page.dark {
+    background-color: #1a1a1a;
+    color: #f8f9fa;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.light header {
+    background-color: #f8f9fa;
+    border-bottom-color: #e9ecef;
+}
+
+.dark header {
+    background-color: #2c2c2c;
+    border-bottom-color: #444;
+}
+
+main {
+    flex: 1;
+    padding: 5rem 2rem 2rem;
+    overflow-y: auto;
+}
+
+h1 {
+    margin-bottom: 1.5rem;
+    transition: color 0.3s;
+}
+
+.light h1 {
+    color: #495057;
+}
+
+.dark h1 {
+    color: #f8f9fa;
+}
+
+form.registration-form {
+    display: grid;
+    gap: 1rem;
+}
+
+form.registration-form section {
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: border-color 0.3s;
+    background-color: white; /* Retain the original white color for form cards */
+}
+
+.light form.registration-form section {
+    border-color: #e9ecef;
+}
+
+.dark form.registration-form section {
+    border-color: #444;
+    background-color: #2c2c2c;
+}
+
+form.registration-form h2 {
+    margin-top: 0;
+    font-weight: bold;
+}
+
+form.registration-form label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+form.registration-form input[type="text"],
+form.registration-form input[type="tel"],
+form.registration-form input[type="date"],
+form.registration-form input[type="number"] {
+    padding: 0.5rem;
+    border: 1px solid;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.light form.registration-form input {
+    border-color: #ced4da;
+    background-color: white; /* Retain the original white color for inputs */
+    color: #495057;
+}
+
+.dark form.registration-form input {
+    border-color: #555;
+    background-color: #333;
+    color: #f8f9fa;
+}
+
+form.registration-form button[type="submit"] {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form.registration-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 4rem 1rem 1rem;
+    }
+
+    form.registration-form {
+        grid-template-columns: 1fr;
+    }
+}
