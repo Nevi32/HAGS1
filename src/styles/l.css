@@ -101,3 +101,12 @@ body, html {
     display: flex;
     align-items: center;
   }
+
+  .message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #f8d7da;
+    color: #721c24;
+    text-align: center;
+  }

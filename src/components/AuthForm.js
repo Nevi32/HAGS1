@@ -1,4 +1,7 @@
+// src/components/AuthForm.js
 import React, { useState } from 'react';
+import { saveUserInfo } from '../utils/localStorage';
+import { authenticateUser } from '../utils/auth';
 
 function AuthForm({ isLogin, toggleForm }) {
   const [formData, setFormData] = useState({
@@ -7,31 +10,31 @@ function AuthForm({ isLogin, toggleForm }) {
     password: '',
     confirmPassword: ''
   });
+  const [message, setMessage] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLogin) {
-      // Handle login logic here
-      // For example, check email and password
-      localStorage.setItem('userInfo', JSON.stringify({
-        email: formData.email
-      }));
-      window.location.href = '/dashboard'; // Redirect to dashboard
+      const result = await authenticateUser(formData.email, formData.password);
+      setMessage(result.message);
+      if (result.success) {
+        window.location.href = '/dashboard';
+      }
     } else {
-      // Handle sign up logic here
-      // For example, save user info
       if (formData.password === formData.confirmPassword) {
-        localStorage.setItem('userInfo', JSON.stringify({
+        await saveUserInfo({
           name: formData.fullName,
-          email: formData.email
-        }));
-        window.location.href = '/dashboard'; // Redirect to dashboard
+          email: formData.email,
+          password: formData.password
+        });
+        setMessage('Account created successfully. Please log in.');
+        toggleForm();
       } else {
-        alert('Passwords do not match');
+        setMessage('Passwords do not match');
       }
     }
   };
@@ -40,6 +43,7 @@ function AuthForm({ isLogin, toggleForm }) {
     <div className="auth-form-container">
       <h2>{isLogin ? 'Welcome to HAGS' : 'Create HAGS Account'}</h2>
       <p>{isLogin ? 'Please sign in to your account' : 'Please fill in the details to create your account'}</p>
+      {message && <div className="message">{message}</div>}
       <form className="auth-form" onSubmit={handleSubmit}>
         {!isLogin && (
           <input
@@ -90,6 +94,8 @@ function AuthForm({ isLogin, toggleForm }) {
 }
 
 export default AuthForm;
+
+
 
 
 
