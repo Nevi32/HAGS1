@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { ThemeContext } from '../contexts/ThemeContext';
-import { saveNewMember } from '../utils/memberStorage';
+import { saveNewMember, getNextProjectId } from '../utils/memberStorage';
 import '../styles/regmembers.css';
 
 function RegMembers() {
@@ -30,13 +30,15 @@ function RegMembers() {
     ward: '',
     location: '',
     subLocation: '',
-    village: ''
+    village: '',
+    projectId: ''
   });
 
   const [popup, setPopup] = useState({ show: false, message: '', type: '' });
 
   useEffect(() => {
     generateMemberUniqueId();
+    setFormData(prevState => ({ ...prevState, projectId: getNextProjectId() }));
   }, []);
 
   const generateMemberUniqueId = () => {
@@ -78,7 +80,8 @@ function RegMembers() {
         ward: '',
         location: '',
         subLocation: '',
-        village: ''
+        village: '',
+        projectId: getNextProjectId()
       });
       generateMemberUniqueId();
     } catch (error) {
@@ -98,7 +101,7 @@ function RegMembers() {
             {popup.message}
           </div>
         )}
-
+        
         <form className="registration-form" onSubmit={handleSubmit}>
           <section>
             <h2>Personal Information</h2>
@@ -149,6 +152,10 @@ function RegMembers() {
           <section>
             <h2>Project Information</h2>
             <label>
+              Project ID:
+              <input type="text" name="projectId" value={formData.projectId} readOnly />
+            </label>
+            <label>
               Variety of Seedlings:
               <input type="text" name="varietyOfSeedlings" value={formData.varietyOfSeedlings} onChange={handleChange} required />
             </label>
@@ -185,6 +192,7 @@ function RegMembers() {
               <input type="number" name="formFee" value={formData.formFee} onChange={handleChange} required />
             </label>
           </section>
+
 
           <section>
             <h2>Area Information</h2>

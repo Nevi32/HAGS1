@@ -1,9 +1,19 @@
 const MEMBERS_STORAGE_KEY = 'hagsMembers';
+const PROJECT_ID_KEY = 'lastProjectId';
 
 export const saveNewMember = (memberInfo) => {
   const existingMembers = getMembers();
-  const updatedMembers = [...existingMembers, memberInfo];
+  const lastProjectId = localStorage.getItem(PROJECT_ID_KEY) || '0';
+  const newProjectId = (parseInt(lastProjectId) + 1).toString().padStart(6, '0');
+  
+  const memberWithProjectId = {
+    ...memberInfo,
+    projectId: newProjectId
+  };
+
+  const updatedMembers = [...existingMembers, memberWithProjectId];
   localStorage.setItem(MEMBERS_STORAGE_KEY, JSON.stringify(updatedMembers));
+  localStorage.setItem(PROJECT_ID_KEY, newProjectId);
 };
 
 export const getMembers = () => {
@@ -15,7 +25,11 @@ export const clearAllMembers = () => {
   localStorage.removeItem(MEMBERS_STORAGE_KEY);
 };
 
-// Updated saveMembers function
 export const saveMembers = (members) => {
   localStorage.setItem(MEMBERS_STORAGE_KEY, JSON.stringify(members));
+};
+
+export const getNextProjectId = () => {
+  const lastProjectId = localStorage.getItem(PROJECT_ID_KEY) || '0';
+  return (parseInt(lastProjectId) + 1).toString().padStart(6, '0');
 };

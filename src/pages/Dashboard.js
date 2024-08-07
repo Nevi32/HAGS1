@@ -10,6 +10,7 @@ function Dashboard() {
   const { theme } = useContext(ThemeContext);
   const [memberCount, setMemberCount] = useState(0);
   const [groupCount, setGroupCount] = useState(0);
+  const [totalFinance, setTotalFinance] = useState(0);
 
   useEffect(() => {
     const loadData = () => {
@@ -17,6 +18,14 @@ function Dashboard() {
       setMemberCount(members.length);
       const uniqueGroups = new Set(members.map(member => member.groupName));
       setGroupCount(uniqueGroups.size);
+
+      // Calculate total finance from depositPaid and formFee
+      const totalFinance = members.reduce((total, member) => {
+        const depositPaid = parseFloat(member.depositPaid) || 0;
+        const formFee = parseFloat(member.formFee) || 0;
+        return total + depositPaid + formFee;
+      }, 0);
+      setTotalFinance(totalFinance);
     };
 
     loadData();
@@ -33,8 +42,8 @@ function Dashboard() {
   const cards = [
     { title: 'Members', value: memberCount.toString(), change: '+6%', route: '/regmembers' },
     { title: 'Groups', value: groupCount.toString(), change: '-3%', route: '/groups' },
-    { title: 'Projects', value: '7', change: '+9%', route: '/projects' },
-    { title: 'Finances', value: '$27.3k', change: '+3%', route: '/finances' }
+    { title: 'Projects', value: '7', change: '+9%', route: '/projects' }, // This value is static for now
+    { title: 'Finances', value: `Ksh ${totalFinance.toFixed(2)}`, change: '+3%', route: '/finances' }
   ];
 
   const handleCardClick = (route) => {
@@ -77,3 +86,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
