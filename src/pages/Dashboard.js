@@ -75,20 +75,6 @@ function Dashboard() {
             </div>
           ))}
         </div>
-        <div className="charts-container">
-          <div className="chart development-activity">
-            <h2>Development Activity</h2>
-            {/* Add your chart component here */}
-          </div>
-          <div className="chart-small">
-            <h2>Chart title</h2>
-            {/* Add your pie chart component here */}
-          </div>
-          <div className="chart-small">
-            <h2>Chart title</h2>
-            {/* Add your donut chart component here */}
-          </div>
-        </div>
       </main>
     </div>
   );

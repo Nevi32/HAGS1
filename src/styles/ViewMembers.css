@@ -1,0 +1,229 @@
+.view-members-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .view-members-page.light {
+    background-color: #f2f2f2;
+    color: #495057;
+  }
+  
+  .view-members-page.dark {
+    background-color: #1a1a1a;
+    color: #f8f9fa;
+  }
+  
+  main {
+    flex: 1;
+    padding: 5rem 2rem 2rem;
+    overflow-y: auto;
+  }
+  
+  h1 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .search-bar {
+    margin-bottom: 2rem;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s;
+  }
+  
+  .light .search-bar input {
+    background-color: #ffffff;
+    color: #495057;
+  }
+  
+  .dark .search-bar input {
+    background-color: #2c2c2c;
+    color: #f8f9fa;
+    border-color: #444;
+  }
+  
+  .members-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .member-card {
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .light .member-card {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+  }
+  
+  .dark .member-card {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+  }
+  
+  .member-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  .member-card h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+  }
+  
+  .member-card p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .member-card strong {
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  
+  .member-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .member-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+  }
+  
+  .light .member-actions button {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  
+  .dark .member-actions button {
+    background-color: #0056b3;
+    color: #ffffff;
+  }
+  
+  .member-actions button:hover {
+    opacity: 0.9;
+  }
+  
+  .edit-member-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .edit-member-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .dark .edit-member-form {
+    background-color: #2c2c2c;
+    color: #f8f9fa;
+  }
+  
+  .edit-member-form h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .edit-member-form form {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .edit-member-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .edit-member-form input,
+  .edit-member-form select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    font-size: 0.9rem;
+  }
+  
+  .dark .edit-member-form input,
+  .dark .edit-member-form select {
+    background-color: #1a1a1a;
+    color: #f8f9fa;
+    border-color: #444;
+  }
+  
+  .form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .form-actions button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+  }
+  
+  .light .form-actions button {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  
+  .dark .form-actions button {
+    background-color: #0056b3;
+    color: #ffffff;
+  }
+  
+  .form-actions button:hover {
+    opacity: 0.9;
+  }
+  
+  @media (max-width: 768px) {
+    .members-list {
+      grid-template-columns: 1fr;
+    }
+  
+    .edit-member-form form {
+      grid-template-columns: 1fr;
+    }
+  }
