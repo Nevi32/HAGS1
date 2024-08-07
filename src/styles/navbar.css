@@ -1,0 +1,111 @@
+/* src/styles/navbar.css */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  nav {
+    display: flex;
+  }
+  
+  nav a {
+    margin: 0 1rem;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  nav a.active {
+    font-weight: bold;
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .menu-toggle {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    nav {
+      display: none;
+    }
+  
+    nav.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      background-color: #f8f9fa;
+    }
+  
+    .menu-toggle {
+      display: block;
+    }
+  }
+
+  /* src/styles/navbar.css */
+
+/* ... other styles ... */
+
+nav button.nav-button {
+    margin: 0 1rem;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+  }
+  
+  nav button.nav-button:hover {
+    text-decoration: underline;
+  }
+  
+  nav button.nav-button.active {
+    font-weight: bold;
+  }
+  
+  nav button.nav-button svg {
+    margin-right: 0.5rem;
+  }
+  
+  /* ... rest of your styles ... */
