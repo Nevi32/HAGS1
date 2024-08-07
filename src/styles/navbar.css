@@ -5,7 +5,8 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    background-color: #f8f9fa;
+    background-color: var(--header-bg);
+    color: var(--header-text);
   }
   
   .logo-container {
@@ -31,7 +32,7 @@ header {
   nav a {
     margin: 0 1rem;
     text-decoration: none;
-    color: #333;
+    color: var(--nav-text);
     cursor: pointer;
   }
   
@@ -48,8 +49,8 @@ header {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--avatar-bg);
+    color: var(--avatar-text);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,23 +73,20 @@ header {
       top: 60px;
       left: 0;
       right: 0;
-      background-color: #f8f9fa;
+      background-color: var(--header-bg);
     }
   
     .menu-toggle {
       display: block;
     }
   }
-
-  /* src/styles/navbar.css */
-
-/* ... other styles ... */
-
-nav button.nav-button {
+  
+  /* Button styles */
+  nav button.nav-button {
     margin: 0 1rem;
     background: none;
     border: none;
-    color: #333;
+    color: var(--nav-text);
     cursor: pointer;
     font-size: 1rem;
     display: flex;
@@ -108,4 +106,37 @@ nav button.nav-button {
     margin-right: 0.5rem;
   }
   
-  /* ... rest of your styles ... */
+  /* Light theme styles */
+  .light {
+    --header-bg: #f8f9fa;
+    --header-text: #333;
+    --nav-text: #333;
+    --avatar-bg: #007bff;
+    --avatar-text: white;
+  }
+  
+  /* Dark theme styles */
+  .dark {
+    --header-bg: #333;
+    --header-text: #f8f9fa;
+    --nav-text: #f8f9fa;
+    --avatar-bg: #555;
+    --avatar-text: #f8f9fa;
+  }
+  
+  .theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: 1rem;
+  }
+  
+  .light .theme-toggle {
+    color: #333;
+  }
+  
+  .dark .theme-toggle {
+    color: #f8f9fa;
+  }
+  

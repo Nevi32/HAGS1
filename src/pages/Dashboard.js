@@ -1,12 +1,12 @@
-// src/pages/Dashboard.js
-
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { ThemeContext } from '../contexts/ThemeContext';
 import '../styles/dstyle.css';
 
 function Dashboard() {
   const navigate = useNavigate();
+  const { theme } = useContext(ThemeContext);
 
   const cards = [
     { title: 'Members', value: '43', change: '+6%', route: '/regmembers' },
@@ -20,11 +20,10 @@ function Dashboard() {
   };
 
   return (
-    <div className="dashboard">
+    <div className={`dashboard ${theme}`}>
       <Navbar />
       <main>
         <h1>Dashboard</h1>
-
         <div className="cards-container">
           {cards.map((card, index) => (
             <div key={index} className="card" onClick={() => handleCardClick(card.route)}>
@@ -36,7 +35,6 @@ function Dashboard() {
             </div>
           ))}
         </div>
-
         <div className="charts-container">
           <div className="chart development-activity">
             <h2>Development Activity</h2>
