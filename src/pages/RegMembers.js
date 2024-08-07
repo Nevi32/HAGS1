@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { saveNewMember } from '../utils/memberStorage';
@@ -10,7 +10,7 @@ function RegMembers() {
     fullName: '',
     nationalId: '',
     contact: '',
-    status: '',
+    status: 'regular-member',
     groupName: '',
     memberUniqueId: '',
     dateOfAdmission: '',
@@ -35,6 +35,15 @@ function RegMembers() {
 
   const [popup, setPopup] = useState({ show: false, message: '', type: '' });
 
+  useEffect(() => {
+    generateMemberUniqueId();
+  }, []);
+
+  const generateMemberUniqueId = () => {
+    const randomId = Math.floor(100000 + Math.random() * 900000).toString();
+    setFormData(prevState => ({ ...prevState, memberUniqueId: randomId }));
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -49,7 +58,7 @@ function RegMembers() {
         fullName: '',
         nationalId: '',
         contact: '',
-        status: '',
+        status: 'regular-member',
         groupName: '',
         memberUniqueId: '',
         dateOfAdmission: '',
@@ -71,6 +80,7 @@ function RegMembers() {
         subLocation: '',
         village: ''
       });
+      generateMemberUniqueId();
     } catch (error) {
       setPopup({ show: true, message: 'Error registering member. Please try again.', type: 'error' });
     }
@@ -106,7 +116,13 @@ function RegMembers() {
             </label>
             <label>
               Status:
-              <input type="text" name="status" value={formData.status} onChange={handleChange} required />
+              <select name="status" value={formData.status} onChange={handleChange} required>
+                <option value="Chairperson">Chairperson</option>
+                <option value="Vice-Chairperson">Vice-Chairperson</option>
+                <option value="Treasurer">Treasurer</option>
+                <option value="project-manager">Project Manager</option>
+                <option value="regular-member">Regular Member</option>
+              </select>
             </label>
             <label>
               Group Name:
@@ -114,7 +130,7 @@ function RegMembers() {
             </label>
             <label>
               Member Unique ID:
-              <input type="text" name="memberUniqueId" value={formData.memberUniqueId} onChange={handleChange} required />
+              <input type="text" name="memberUniqueId" value={formData.memberUniqueId} readOnly />
             </label>
             <label>
               Date of Admission:
