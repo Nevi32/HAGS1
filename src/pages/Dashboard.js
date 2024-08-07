@@ -1,16 +1,38 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { ThemeContext } from '../contexts/ThemeContext';
+import { getMembers } from '../utils/memberStorage';
 import '../styles/dstyle.css';
 
 function Dashboard() {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
+  const [memberCount, setMemberCount] = useState(0);
+  const [groupCount, setGroupCount] = useState(0);
+
+  useEffect(() => {
+    const loadData = () => {
+      const members = getMembers();
+      setMemberCount(members.length);
+      const uniqueGroups = new Set(members.map(member => member.groupName));
+      setGroupCount(uniqueGroups.size);
+    };
+
+    loadData();
+
+    // Add event listener for storage changes
+    window.addEventListener('storage', loadData);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('storage', loadData);
+    };
+  }, []);
 
   const cards = [
-    { title: 'Members', value: '43', change: '+6%', route: '/regmembers' },
-    { title: 'Groups', value: '17', change: '-3%', route: '/groups' },
+    { title: 'Members', value: memberCount.toString(), change: '+6%', route: '/regmembers' },
+    { title: 'Groups', value: groupCount.toString(), change: '-3%', route: '/groups' },
     { title: 'Projects', value: '7', change: '+9%', route: '/projects' },
     { title: 'Finances', value: '$27.3k', change: '+3%', route: '/finances' }
   ];

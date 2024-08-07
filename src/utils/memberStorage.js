@@ -1,5 +1,3 @@
-// src/utils/memberStorage.js
-
 const MEMBERS_STORAGE_KEY = 'hagsMembers';
 
 export const saveNewMember = (memberInfo) => {
@@ -15,4 +13,9 @@ export const getMembers = () => {
 
 export const clearAllMembers = () => {
   localStorage.removeItem(MEMBERS_STORAGE_KEY);
+};
+
+// Updated saveMembers function
+export const saveMembers = (members) => {
+  localStorage.setItem(MEMBERS_STORAGE_KEY, JSON.stringify(members));
 };
