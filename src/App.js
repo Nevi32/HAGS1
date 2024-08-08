@@ -1,5 +1,3 @@
-// src/App.js
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -10,6 +8,7 @@ import RegMembers from './pages/RegMembers';
 import Groups from './pages/Groups';
 import Projects from './pages/Projects';
 import Finances from './pages/Finances';
+import Quick from './pages/Quick';
 
 function App() {
   return (
@@ -23,6 +22,7 @@ function App() {
           <Route path="/groups" element={<Groups />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/finances" element={<Finances />} />
+          <Route path="/quick" element={<Quick />} />
         </Routes>
       </Router>
     </ThemeProvider>

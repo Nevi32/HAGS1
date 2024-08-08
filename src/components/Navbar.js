@@ -1,5 +1,3 @@
-// src/components/Navbar.js
-
 import React, { useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaChartBar, FaUsers, FaBolt, FaSun, FaMoon } from 'react-icons/fa';
@@ -18,7 +16,7 @@ function Navbar() {
   const sections = [
     { name: 'Dashboard', icon: FaChartBar, route: '/dashboard' },
     { name: 'Members', icon: FaUsers, route: '/viewmembers' },
-    { name: 'Quick', icon: FaBolt, route: '' }
+    { name: 'Quick', icon: FaBolt, route: '/quick' },
   ];
 
   const handleNavClick = (route) => {
@@ -36,10 +34,12 @@ function Navbar() {
       </div>
       <nav className={menuOpen ? 'open' : ''}>
         {sections.map((section, index) => (
-          <button 
-            key={index} 
+          <button
+            key={index}
             onClick={() => handleNavClick(section.route)}
-            className={`nav-button ${location.pathname === section.route ? 'active' : ''}`}
+            className={`nav-button ${
+              location.pathname === section.route ? 'active' : ''
+            }`}
           >
             <section.icon /> {section.name}
           </button>
