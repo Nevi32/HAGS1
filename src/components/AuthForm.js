@@ -1,4 +1,3 @@
-// src/components/AuthForm.js
 import React, { useState } from 'react';
 import { saveUserInfo } from '../utils/localStorage';
 import { authenticateUser } from '../utils/auth';
@@ -8,7 +7,7 @@ function AuthForm({ isLogin, toggleForm }) {
     fullName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
   const [message, setMessage] = useState(null);
 
@@ -29,7 +28,7 @@ function AuthForm({ isLogin, toggleForm }) {
         await saveUserInfo({
           name: formData.fullName,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
         });
         setMessage('Account created successfully. Please log in.');
         toggleForm();
@@ -84,7 +83,6 @@ function AuthForm({ isLogin, toggleForm }) {
         <button type="submit">{isLogin ? 'Sign In' : 'Sign Up'}</button>
       </form>
       <div className="form-options">
-        {isLogin && <a href="#forgot-password" className="forgot-password">Forgot Password?</a>}
         <button onClick={toggleForm} className="toggle-form">
           {isLogin ? 'Create an account' : 'Already have an account? Sign in'}
         </button>

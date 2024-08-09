@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Logo from '../components/Logo';
 import AuthForm from '../components/AuthForm';
 import '../styles/l.css';
@@ -15,6 +16,9 @@ function LandingPage() {
       </div>
       <div className="flex-1 flex flex-col justify-center items-center p-8 bg-background-green md:bg-white">
         <AuthForm isLogin={isLogin} toggleForm={() => setIsLogin(!isLogin)} />
+        <Link to="/quick" className="quick-link">
+          <button className="quick-button">Quick Actions</button>
+        </Link>
       </div>
     </div>
   );

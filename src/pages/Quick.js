@@ -30,15 +30,18 @@ function Quick() {
 
   const handleRestore = async () => {
     setIsRestoreInProgress(true);
-    const backupData = await uploadFile('hags-backup.json');
-    if (backupData) {
-      localStorage.setItem('userInfo', JSON.stringify(backupData.userInfo));
-      localStorage.setItem('hagsMembers', JSON.stringify(backupData.members));
-      localStorage.setItem('hagsFinances', JSON.stringify(backupData.finances));
-      localStorage.setItem('lastProjectId', backupData.lastProjectId);
-      setIsRestoreInProgress(false);
-      navigate('/dashboard');
-    } else {
+    try {
+      const backupData = await uploadFile();
+      if (backupData) {
+        localStorage.setItem('userInfo', JSON.stringify(backupData.userInfo));
+        localStorage.setItem('hagsMembers', JSON.stringify(backupData.members));
+        localStorage.setItem('hagsFinances', JSON.stringify(backupData.finances));
+        localStorage.setItem('lastProjectId', backupData.lastProjectId);
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error('Restore failed:', error);
+    } finally {
       setIsRestoreInProgress(false);
     }
   };
