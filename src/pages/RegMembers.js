@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { ThemeContext } from '../contexts/ThemeContext';
-import { saveNewMember, getNextProjectId } from '../utils/memberStorage';
+import { addMember, getNextProjectId, saveNewMember } from '../utils/memberStorage'; // Updated imports
+
 import '../styles/regmembers.css';
 
 function RegMembers() {
@@ -55,39 +56,42 @@ function RegMembers() {
     try {
       saveNewMember(formData);
       setPopup({ show: true, message: 'Member registered successfully!', type: 'success' });
-      // Reset form after submission
-      setFormData({
-        fullName: '',
-        nationalId: '',
-        contact: '',
-        status: 'regular-member',
-        groupName: '',
-        memberUniqueId: '',
-        dateOfAdmission: '',
-        nextOfKin: '',
-        nextOfKinContact: '',
-        varietyOfSeedlings: '',
-        numberOfSeedlingsOrdered: '',
-        amountToBePaid: '',
-        depositPaid: '',
-        balance: '',
-        dateOfPayment: '',
-        dateToCompletePayment: '',
-        amountPaid: '',
-        formFee: '',
-        county: '',
-        subCounty: '',
-        ward: '',
-        location: '',
-        subLocation: '',
-        village: '',
-        projectId: getNextProjectId()
-      });
-      generateMemberUniqueId();
+      resetForm();
     } catch (error) {
       setPopup({ show: true, message: 'Error registering member. Please try again.', type: 'error' });
     }
     setTimeout(() => setPopup({ show: false, message: '', type: '' }), 3000);
+  };
+
+  const resetForm = () => {
+    setFormData({
+      fullName: '',
+      nationalId: '',
+      contact: '',
+      status: 'regular-member',
+      groupName: '',
+      memberUniqueId: '',
+      dateOfAdmission: '',
+      nextOfKin: '',
+      nextOfKinContact: '',
+      varietyOfSeedlings: '',
+      numberOfSeedlingsOrdered: '',
+      amountToBePaid: '',
+      depositPaid: '',
+      balance: '',
+      dateOfPayment: '',
+      dateToCompletePayment: '',
+      amountPaid: '',
+      formFee: '',
+      county: '',
+      subCounty: '',
+      ward: '',
+      location: '',
+      subLocation: '',
+      village: '',
+      projectId: getNextProjectId()
+    });
+    generateMemberUniqueId();
   };
 
   return (
@@ -95,13 +99,13 @@ function RegMembers() {
       <Navbar />
       <main>
         <h1>Register Members</h1>
-       
+
         {popup.show && (
           <div className={`popup ${popup.type}`}>
             {popup.message}
           </div>
         )}
-        
+
         <form className="registration-form" onSubmit={handleSubmit}>
           <section>
             <h2>Personal Information</h2>
@@ -192,7 +196,6 @@ function RegMembers() {
               <input type="number" name="formFee" value={formData.formFee} onChange={handleChange} required />
             </label>
           </section>
-
 
           <section>
             <h2>Area Information</h2>

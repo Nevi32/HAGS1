@@ -28,8 +28,8 @@ function Finances() {
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    const members = getMembers();
-    const expensesData = getFinances();
+    const members = getMembers() || [];
+    const expensesData = getFinances() || [];
 
     const totalDeposits = members.reduce((sum, member) => sum + Number(member.depositPaid), 0);
     const totalBalance = members.reduce((sum, member) => sum + Number(member.balance), 0);
@@ -51,14 +51,12 @@ function Finances() {
 
     setExpenses(expensesData);
 
-    const currentPieChartRef = pieChartRef.current;
-    const currentBarChartRef = barChartRef.current;
     return () => {
-      if (currentPieChartRef) {
-        currentPieChartRef.destroy();
+      if (pieChartRef.current) {
+        pieChartRef.current.destroy();
       }
-      if (currentBarChartRef) {
-        currentBarChartRef.destroy();
+      if (barChartRef.current) {
+        barChartRef.current.destroy();
       }
     };
   }, []);
@@ -156,11 +154,11 @@ function Finances() {
         </div>
       </main>
       {showExpenseForm && (
-        <div className="expense-form-popup">
-          <h2>Add Expense</h2>
+        <div className="expense-form">
+          <h3>Add Expense</h3>
           <input
             type="text"
-            placeholder="Expense"
+            placeholder="Expense Name"
             value={expense}
             onChange={(e) => setExpense(e.target.value)}
           />
@@ -171,7 +169,6 @@ function Finances() {
             onChange={(e) => setAmount(e.target.value)}
           />
           <button onClick={handleSaveExpense}>Save</button>
-          <button onClick={() => setShowExpenseForm(false)}>Close</button>
         </div>
       )}
     </div>

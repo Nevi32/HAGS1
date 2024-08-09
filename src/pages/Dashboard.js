@@ -15,7 +15,7 @@ function Dashboard() {
 
   useEffect(() => {
     const loadData = () => {
-      const members = getMembers();
+      const members = getMembers() || [];
       setMemberCount(members.length);
       
       const uniqueGroups = new Set(members.map(member => member.groupName));
@@ -39,10 +39,8 @@ function Dashboard() {
 
     loadData();
 
-    // Add event listener for storage changes
     window.addEventListener('storage', loadData);
 
-    // Cleanup
     return () => {
       window.removeEventListener('storage', loadData);
     };
@@ -81,4 +79,5 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
