@@ -1,17 +1,18 @@
 export function downloadFile(filename, content) {
   const element = document.createElement('a');
-  element.setAttribute(
-    'href',
-    'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
-  );
-  element.setAttribute('download', filename);
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  element.setAttribute('href', url);
 
+  // Open a file dialog to let the user choose where to save the file
+  element.setAttribute('download', filename);
   element.style.display = 'none';
   document.body.appendChild(element);
 
   element.click();
 
   document.body.removeChild(element);
+  URL.revokeObjectURL(url);
 }
 
 export async function uploadFile() {

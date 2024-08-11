@@ -26,9 +26,14 @@ function Navbar() {
     }
   };
 
+  const handleLogoClick = () => {
+    navigate('/dashboard');
+    setMenuOpen(false);
+  };
+
   return (
     <header className={theme}>
-      <div className="logo-container">
+      <div className="logo-container" onClick={handleLogoClick}>
         <img src={Logo} alt="Logo" className="logo" />
         <span className="logo-text">HAGS</span>
       </div>
