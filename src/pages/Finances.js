@@ -11,7 +11,6 @@ ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tool
 
 function Finances() {
   const [financialData, setFinancialData] = useState({
-    totalDeposits: 0,
     totalBalance: 0,
     completedPayments: 0,
     totalAmountPaid: 0,
@@ -28,10 +27,10 @@ function Finances() {
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    const members = getMembers() || [];
-    const expensesData = getFinances() || [];
+    const members = getMembers();
+    const expensesData = getFinances();
 
-    const totalDeposits = members.reduce((sum, member) => sum + Number(member.depositPaid), 0);
+   
     const totalBalance = members.reduce((sum, member) => sum + Number(member.balance), 0);
     const totalAmountPaid = members.reduce((sum, member) => sum + Number(member.amountPaid), 0);
     const completedPayments = members.filter(member => 
@@ -41,7 +40,7 @@ function Finances() {
     const totalFormFee = members.reduce((sum, member) => sum + Number(member.formFee), 0);
 
     setFinancialData({
-      totalDeposits,
+      
       totalBalance,
       completedPayments,
       totalAmountPaid,
@@ -51,12 +50,14 @@ function Finances() {
 
     setExpenses(expensesData);
 
+    const currentPieChartRef = pieChartRef.current;
+    const currentBarChartRef = barChartRef.current;
     return () => {
-      if (pieChartRef.current) {
-        pieChartRef.current.destroy();
+      if (currentPieChartRef) {
+        currentPieChartRef.destroy();
       }
-      if (barChartRef.current) {
-        barChartRef.current.destroy();
+      if (currentBarChartRef) {
+        currentBarChartRef.destroy();
       }
     };
   }, []);
@@ -118,10 +119,6 @@ function Finances() {
         <h1>Finances</h1>
         <div className="cards-container">
           <div className="card">
-            <div className="title">Total Deposits</div>
-            <div className="value">KSh {financialData.totalDeposits.toLocaleString()}</div>
-          </div>
-          <div className="card">
             <div className="title">Total Balance</div>
             <div className="value">KSh {financialData.totalBalance.toLocaleString()}</div>
           </div>
@@ -154,11 +151,11 @@ function Finances() {
         </div>
       </main>
       {showExpenseForm && (
-        <div className="expense-form">
-          <h3>Add Expense</h3>
+        <div className="expense-form-popup">
+          <h2>Add Expense</h2>
           <input
             type="text"
-            placeholder="Expense Name"
+            placeholder="Expense"
             value={expense}
             onChange={(e) => setExpense(e.target.value)}
           />
@@ -169,6 +166,7 @@ function Finances() {
             onChange={(e) => setAmount(e.target.value)}
           />
           <button onClick={handleSaveExpense}>Save</button>
+          <button onClick={() => setShowExpenseForm(false)}>Close</button>
         </div>
       )}
     </div>

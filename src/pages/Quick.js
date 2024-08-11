@@ -17,12 +17,12 @@ function Quick() {
     const userInfo = getUserInfo();
     const members = getMembers();
     const finances = getFinances();
-    const lastProjectId = getNextProjectId();
+    const lastProjectId = getNextProjectId(); // Get the current project ID
     const backupData = {
       userInfo,
       members,
       finances,
-      lastProjectId,
+      lastProjectId, // Include the current project ID in the backup
     };
     downloadFile('hags-backup.json', JSON.stringify(backupData));
     setIsBackupInProgress(false);
@@ -36,7 +36,7 @@ function Quick() {
         localStorage.setItem('userInfo', JSON.stringify(backupData.userInfo));
         localStorage.setItem('hagsMembers', JSON.stringify(backupData.members));
         localStorage.setItem('hagsFinances', JSON.stringify(backupData.finances));
-        localStorage.setItem('lastProjectId', backupData.lastProjectId);
+        localStorage.setItem('lastProjectId', backupData.lastProjectId); // Restore the project ID from backup
         navigate('/dashboard');
       }
     } catch (error) {

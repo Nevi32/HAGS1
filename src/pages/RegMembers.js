@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { ThemeContext } from '../contexts/ThemeContext';
-import { addMember, getNextProjectId, saveNewMember } from '../utils/memberStorage'; // Updated imports
-
+import { saveNewMember, getNextProjectId } from '../utils/memberStorage';
 import '../styles/regmembers.css';
 
 function RegMembers() {
@@ -20,7 +19,6 @@ function RegMembers() {
     varietyOfSeedlings: '',
     numberOfSeedlingsOrdered: '',
     amountToBePaid: '',
-    depositPaid: '',
     balance: '',
     dateOfPayment: '',
     dateToCompletePayment: '',
@@ -56,42 +54,38 @@ function RegMembers() {
     try {
       saveNewMember(formData);
       setPopup({ show: true, message: 'Member registered successfully!', type: 'success' });
-      resetForm();
+      // Reset form after submission
+      setFormData({
+        fullName: '',
+        nationalId: '',
+        contact: '',
+        status: 'regular-member',
+        groupName: '',
+        memberUniqueId: '',
+        dateOfAdmission: '',
+        nextOfKin: '',
+        nextOfKinContact: '',
+        varietyOfSeedlings: '',
+        numberOfSeedlingsOrdered: '',
+        amountToBePaid: '',
+        balance: '',
+        dateOfPayment: '',
+        dateToCompletePayment: '',
+        amountPaid: '',
+        formFee: '',
+        county: '',
+        subCounty: '',
+        ward: '',
+        location: '',
+        subLocation: '',
+        village: '',
+        projectId: getNextProjectId()
+      });
+      generateMemberUniqueId();
     } catch (error) {
       setPopup({ show: true, message: 'Error registering member. Please try again.', type: 'error' });
     }
     setTimeout(() => setPopup({ show: false, message: '', type: '' }), 3000);
-  };
-
-  const resetForm = () => {
-    setFormData({
-      fullName: '',
-      nationalId: '',
-      contact: '',
-      status: 'regular-member',
-      groupName: '',
-      memberUniqueId: '',
-      dateOfAdmission: '',
-      nextOfKin: '',
-      nextOfKinContact: '',
-      varietyOfSeedlings: '',
-      numberOfSeedlingsOrdered: '',
-      amountToBePaid: '',
-      depositPaid: '',
-      balance: '',
-      dateOfPayment: '',
-      dateToCompletePayment: '',
-      amountPaid: '',
-      formFee: '',
-      county: '',
-      subCounty: '',
-      ward: '',
-      location: '',
-      subLocation: '',
-      village: '',
-      projectId: getNextProjectId()
-    });
-    generateMemberUniqueId();
   };
 
   return (
@@ -99,13 +93,13 @@ function RegMembers() {
       <Navbar />
       <main>
         <h1>Register Members</h1>
-
+       
         {popup.show && (
           <div className={`popup ${popup.type}`}>
             {popup.message}
           </div>
         )}
-
+        
         <form className="registration-form" onSubmit={handleSubmit}>
           <section>
             <h2>Personal Information</h2>
@@ -172,10 +166,6 @@ function RegMembers() {
               <input type="number" name="amountToBePaid" value={formData.amountToBePaid} onChange={handleChange} required />
             </label>
             <label>
-              Deposit Paid (Ksh):
-              <input type="number" name="depositPaid" value={formData.depositPaid} onChange={handleChange} required />
-            </label>
-            <label>
               Balance (Ksh):
               <input type="number" name="balance" value={formData.balance} onChange={handleChange} required />
             </label>
@@ -233,3 +223,4 @@ function RegMembers() {
 }
 
 export default RegMembers;
+

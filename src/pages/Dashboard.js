@@ -15,7 +15,7 @@ function Dashboard() {
 
   useEffect(() => {
     const loadData = () => {
-      const members = getMembers() || [];
+      const members = getMembers();
       setMemberCount(members.length);
       
       const uniqueGroups = new Set(members.map(member => member.groupName));
@@ -28,19 +28,21 @@ function Dashboard() {
       }, 0);
       setProjectCount(highestProjectId);
 
-      // Calculate total finance from depositPaid and formFee
+      // Calculate total finance from amountPaid and formFee
       const totalFinance = members.reduce((total, member) => {
-        const depositPaid = parseFloat(member.depositPaid) || 0;
+        const amountPaid = parseFloat(member.amountPaid) || 0;
         const formFee = parseFloat(member.formFee) || 0;
-        return total + depositPaid + formFee;
+        return total + amountPaid + formFee;
       }, 0);
       setTotalFinance(totalFinance);
     };
 
     loadData();
 
+    // Add event listener for storage changes
     window.addEventListener('storage', loadData);
 
+    // Cleanup
     return () => {
       window.removeEventListener('storage', loadData);
     };
