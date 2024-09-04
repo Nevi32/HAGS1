@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -10,6 +9,7 @@ import Groups from './pages/Groups';
 import Projects from './pages/Projects';
 import Finances from './pages/Finances';
 import Quick from './pages/Quick';
+import ReceiptManager from './pages/ReceiptManager'; // Import ReceiptManager component
 import OfflineBanner from './components/OfflineBanner';
 import SyncNotification from './components/SyncNotification';
 
@@ -24,7 +24,6 @@ function App() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Listen for sync complete message from service worker
     navigator.serviceWorker.addEventListener('message', (event) => {
       if (event.data && event.data.type === 'SYNC_COMPLETE') {
         setIsSyncing(false);
@@ -39,7 +38,6 @@ function App() {
 
   useEffect(() => {
     if (!isOffline) {
-      // Trigger sync when coming back online
       setIsSyncing(true);
       navigator.serviceWorker.ready.then(registration => {
         registration.sync.register('sync-data');
@@ -61,6 +59,7 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/finances" element={<Finances />} />
           <Route path="/quick" element={<Quick />} />
+          <Route path="/receiptmanager" element={<ReceiptManager />} /> {/* New Route */}
         </Routes>
       </Router>
     </ThemeProvider>

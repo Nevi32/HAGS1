@@ -17,18 +17,16 @@ function Dashboard() {
     const loadData = () => {
       const members = getMembers();
       setMemberCount(members.length);
-      
+
       const uniqueGroups = new Set(members.map(member => member.groupName));
       setGroupCount(uniqueGroups.size);
-      
-      // Count the number of unique project IDs
+
       const highestProjectId = members.reduce((max, member) => {
         const currentId = parseInt(member.projectId, 10);
         return currentId > max ? currentId : max;
       }, 0);
       setProjectCount(highestProjectId);
 
-      // Calculate total finance from amountPaid and formFee
       const totalFinance = members.reduce((total, member) => {
         const amountPaid = parseFloat(member.amountPaid) || 0;
         const formFee = parseFloat(member.formFee) || 0;
@@ -39,10 +37,8 @@ function Dashboard() {
 
     loadData();
 
-    // Add event listener for storage changes
     window.addEventListener('storage', loadData);
 
-    // Cleanup
     return () => {
       window.removeEventListener('storage', loadData);
     };
@@ -52,7 +48,8 @@ function Dashboard() {
     { title: 'Members', value: memberCount.toString(), change: '+6%', route: '/regmembers' },
     { title: 'Groups', value: groupCount.toString(), change: '-3%', route: '/groups' },
     { title: 'Projects', value: projectCount.toString(), change: '+9%', route: '/projects' },
-    { title: 'Finances', value: `Ksh ${totalFinance.toFixed(2)}`, change: '+3%', route: '/finances' }
+    { title: 'Finances', value: `Ksh ${totalFinance.toFixed(2)}`, change: '+3%', route: '/finances' },
+    { title: 'Receipts Manager', value: 'Manage', change: '+2%', route: '/receiptmanager' }
   ];
 
   const handleCardClick = (route) => {
@@ -81,5 +78,6 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
 

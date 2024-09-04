@@ -1,0 +1,198 @@
+.receipts-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .receipts-page.light {
+    background-color: #f2f2f2;
+    color: #495057;
+  }
+  
+  .receipts-page.dark {
+    background-color: #1a1a1a;
+    color: #f8f9fa;
+  }
+  
+  main {
+    flex: 1;
+    padding: 5rem 2rem 2rem;
+    overflow-y: auto;
+  }
+  
+  h1 {
+    margin-bottom: 1.5rem;
+    transition: color 0.3s;
+  }
+  
+  .light h1 {
+    color: #495057;
+  }
+  
+  .dark h1 {
+    color: #f8f9fa;
+  }
+  
+  .search-bar {
+    margin-bottom: 2rem;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s;
+  }
+  
+  .light .search-bar input {
+    background-color: #ffffff;
+    color: #495057;
+  }
+  
+  .dark .search-bar input {
+    background-color: #2c2c2c;
+    color: #f8f9fa;
+    border-color: #444;
+  }
+  
+  .receipts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  
+  .receipt-card {
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .light .receipt-card {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+  }
+  
+  .dark .receipt-card {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+  }
+  
+  .receipt-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .receipt-card h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .receipt-card p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 768px) {
+    .receipts-list {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .payment-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .payment-popup {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .dark .payment-popup {
+    background-color: #2c2c2c;
+    color: #f8f9fa;
+  }
+  
+  .payment-popup h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .payment-popup table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+  }
+  
+  .payment-popup th,
+  .payment-popup td {
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    text-align: left;
+  }
+  
+  .dark .payment-popup th,
+  .dark .payment-popup td {
+    border-color: #444;
+  }
+  
+  .payment-popup input {
+    width: 100%;
+    padding: 0.25rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+  
+  .dark .payment-popup input {
+    background-color: #1a1a1a;
+    color: #f8f9fa;
+    border-color: #444;
+  }
+  
+  .payment-popup button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 0.5rem;
+  }
+  
+  .light .payment-popup button {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  
+  .dark .payment-popup button {
+    background-color: #0056b3;
+    color: #ffffff;
+  }
+  
+  .payment-popup button:hover {
+    opacity: 0.8;
+  }
+  
+  .popup-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
