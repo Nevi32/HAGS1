@@ -1,27 +1,50 @@
-// src/utils/auth.js
-import { getUserInfo } from './localStorage';
+import { auth } from '../lib/firebase-config.mjs';
+import { 
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+} from 'firebase/auth';
 
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hash))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
-}
+export const signUp = async (email, password) => {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        return { success: true, user: userCredential.user, message: 'Sign up successful' };
+    } catch (error) {
+        console.error("Error signing up:", error.message);
+        return { success: false, message: error.message };
+    }
+};
 
-export const authenticateUser = async (email, password) => {
-  const userInfo = getUserInfo();
-  
-  if (!userInfo || userInfo.email !== email) {
-    return { success: false, message: 'Invalid email or password' };
-  }
+export const signIn = async (email, password) => {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        return { success: true, user: userCredential.user, message: 'Sign in successful' };
+    } catch (error) {
+        console.error("Error signing in:", error.message);
+        return { success: false, message: 'Invalid email or password' };
+    }
+};
 
-  const hashedPassword = await hashPassword(password);
-  
-  if (hashedPassword !== userInfo.password) {
-    return { success: false, message: 'Invalid email or password' };
-  }
+export const signOutUser = async () => {
+    try {
+        await signOut(auth);
+        return { success: true, message: 'Sign out successful' };
+    } catch (error) {
+        console.error("Error signing out:", error.message);
+        return { success: false, message: error.message };
+    }
+};
 
-  return { success: true, message: 'Login successful' };
+export const onAuthStateChange = (callback) => {
+    return onAuthStateChanged(auth, (user) => {
+        if (user) {
+            callback({
+                uid: user.uid,
+                email: user.email,
+            });
+        } else {
+            callback(null);
+        }
+    });
 };

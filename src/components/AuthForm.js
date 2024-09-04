@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { saveUserInfo } from '../utils/localStorage';
-import { authenticateUser } from '../utils/auth';
+import { signUp, signIn } from '../utils/auth';
+import { Eye, EyeOff } from 'lucide-react';
 
 function AuthForm({ isLogin, toggleForm }) {
   const [formData, setFormData] = useState({
@@ -10,6 +10,8 @@ function AuthForm({ isLogin, toggleForm }) {
     confirmPassword: '',
   });
   const [message, setMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,24 +20,30 @@ function AuthForm({ isLogin, toggleForm }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLogin) {
-      const result = await authenticateUser(formData.email, formData.password);
+      const result = await signIn(formData.email, formData.password);
       setMessage(result.message);
       if (result.success) {
         window.location.href = '/dashboard';
       }
     } else {
       if (formData.password === formData.confirmPassword) {
-        await saveUserInfo({
-          name: formData.fullName,
-          email: formData.email,
-          password: formData.password,
-        });
-        setMessage('Account created successfully. Please log in.');
-        toggleForm();
+        const result = await signUp(formData.email, formData.password);
+        setMessage(result.message);
+        if (result.success) {
+          toggleForm();
+        }
       } else {
         setMessage('Passwords do not match');
       }
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -62,23 +70,41 @@ function AuthForm({ isLogin, toggleForm }) {
           onChange={handleChange}
           required
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        {!isLogin && (
+        <div className="password-input-container">
           <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
             onChange={handleChange}
             required
           />
+          <button 
+            type="button" 
+            className="password-toggle"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
+        {!isLogin && (
+          <div className="password-input-container">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+            <button 
+              type="button" 
+              className="password-toggle"
+              onClick={toggleConfirmPasswordVisibility}
+            >
+              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
         )}
         <button type="submit">{isLogin ? 'Sign In' : 'Sign Up'}</button>
       </form>
@@ -92,7 +118,6 @@ function AuthForm({ isLogin, toggleForm }) {
 }
 
 export default AuthForm;
-
 
 
 

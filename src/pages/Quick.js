@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs } from "firebase/firestore";
-import { db } from '../lib/firebase-config.mjs';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from "firebase/firestore";
+import { db, auth } from '../lib/firebase-config.mjs';
+import { onAuthStateChanged } from 'firebase/auth';
 import Navbar from '../components/Navbar';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { getUserInfo, getMembers, getFinances, getNextProjectId } from '../utils/localStorage';
@@ -19,8 +20,26 @@ function Quick() {
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [backupStatus, setBackupStatus] = useState({});
   const [restoreStatus, setRestoreStatus] = useState('');
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (!currentUser) {
+        navigate('/login');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
 
   const syncCollectionToFirestore = async (collectionName, data) => {
+    if (!user) {
+      console.error('User not authenticated');
+      setBackupStatus(prev => ({ ...prev, [collectionName]: 'Failed: User not authenticated' }));
+      return;
+    }
+
     try {
       const collectionRef = collection(db, collectionName);
       let updatedCount = 0;
@@ -85,11 +104,16 @@ function Quick() {
       }));
     } catch (error) {
       console.error(`Error syncing ${collectionName} with Firestore:`, error);
-      setBackupStatus(prev => ({ ...prev, [collectionName]: 'Failed' }));
+      setBackupStatus(prev => ({ ...prev, [collectionName]: `Failed: ${error.message}` }));
     }
   };
 
   const handleBackup = async () => {
+    if (!user) {
+      console.error('User not authenticated');
+      return;
+    }
+
     setIsBackupInProgress(true);
     setBackupStatus({});
 
@@ -110,6 +134,12 @@ function Quick() {
   };
 
   const handleRestore = async () => {
+    if (!user) {
+      console.error('User not authenticated');
+      setRestoreStatus('Failed: User not authenticated');
+      return;
+    }
+
     setIsRestoreInProgress(true);
     setRestoreStatus('Restoring data...');
 
@@ -135,13 +165,18 @@ function Quick() {
       navigate('/dashboard');
     } catch (error) {
       console.error('Restore failed:', error);
-      setRestoreStatus('Failed to restore data from Firestore.');
+      setRestoreStatus(`Failed to restore data from Firestore: ${error.message}`);
     } finally {
       setIsRestoreInProgress(false);
     }
   };
 
   const handleGenerateReport = async (reportType) => {
+    if (!user) {
+      console.error('User not authenticated');
+      return;
+    }
+
     setIsGeneratingReport(true);
     let reportData;
     let fileName;
@@ -199,6 +234,10 @@ function Quick() {
       setIsReportModalOpen(false);
     }
   };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={`quick ${theme}`}>
@@ -278,4 +317,3 @@ function Quick() {
 }
 
 export default Quick;
-
