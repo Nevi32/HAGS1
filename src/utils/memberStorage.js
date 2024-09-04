@@ -3,17 +3,22 @@ const PROJECT_ID_KEY = 'lastProjectId';
 
 export const saveNewMember = (memberInfo) => {
   const existingMembers = getMembers();
-  const lastProjectId = localStorage.getItem(PROJECT_ID_KEY) || '0';
-  const newProjectId = (parseInt(lastProjectId) + 1).toString().padStart(6, '0');
+  
+  // Use the project ID provided by the user, or generate a new one if not provided
+  const projectId = memberInfo.projectId || getNextProjectId();
   
   const memberWithProjectId = {
     ...memberInfo,
-    projectId: newProjectId
+    projectId: projectId
   };
 
   const updatedMembers = [...existingMembers, memberWithProjectId];
   localStorage.setItem(MEMBERS_STORAGE_KEY, JSON.stringify(updatedMembers));
-  localStorage.setItem(PROJECT_ID_KEY, newProjectId);
+  
+  // Update the last project ID only if a new one was generated
+  if (!memberInfo.projectId) {
+    localStorage.setItem(PROJECT_ID_KEY, projectId);
+  }
 };
 
 export const getMembers = () => {
@@ -30,6 +35,6 @@ export const saveMembers = (members) => {
 };
 
 export const getNextProjectId = () => {
-  const lastProjectId = localStorage.getItem(PROJECT_ID_KEY) || '0';
+  const lastProjectId = localStorage.getItem(PROJECT_ID_KEY) || '000000';
   return (parseInt(lastProjectId) + 1).toString().padStart(6, '0');
 };

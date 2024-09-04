@@ -79,7 +79,7 @@ function RegMembers() {
         location: '',
         subLocation: '',
         village: '',
-        projectId: getNextProjectId()
+        projectId: ''
       });
       generateMemberUniqueId();
     } catch (error) {
@@ -151,7 +151,7 @@ function RegMembers() {
             <h2>Project Information</h2>
             <label>
               Project ID:
-              <input type="text" name="projectId" value={formData.projectId} readOnly />
+              <input type="text" name="projectId" value={formData.projectId} onChange={handleChange} required />
             </label>
             <label>
               Variety of Seedlings:
