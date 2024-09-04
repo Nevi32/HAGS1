@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from '../lib/firebase-config.mjs';
 import Navbar from '../components/Navbar';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { getUserInfo, getMembers, getFinances, getNextProjectId } from '../utils/localStorage';
-import { downloadFile, uploadFile } from '../utils/fileUtils';
 import { generateFinancialReport, generateMembersGroupsReport, generateProjectsReport } from '../utils/reportUtils';
 import '../styles/quick.css';
 import jsPDF from 'jspdf';
@@ -16,40 +17,125 @@ function Quick() {
   const [isRestoreInProgress, setIsRestoreInProgress] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [backupStatus, setBackupStatus] = useState({});
+  const [restoreStatus, setRestoreStatus] = useState('');
 
-  const handleBackup = () => {
+  const syncCollectionToFirestore = async (collectionName, data) => {
+    try {
+      const collectionRef = collection(db, collectionName);
+      let updatedCount = 0;
+      let createdCount = 0;
+      let deletedCount = 0;
+
+      // Special handling for finances
+      if (collectionName === 'finances') {
+        const firestoreFinances = await getDocs(collectionRef);
+        
+        if (data.length === 0) {
+          for (const doc of firestoreFinances.docs) {
+            await deleteDoc(doc.ref);
+            deletedCount++;
+          }
+          setBackupStatus(prev => ({
+            ...prev,
+            [collectionName]: `Success: Deleted all ${deletedCount} finance entries from Firestore`
+          }));
+          return;
+        }
+      }
+
+      for (const item of data) {
+        let queryConstraints = [];
+        switch(collectionName) {
+          case 'members':
+            queryConstraints = [
+              where('groupName', '==', item.groupName),
+              where('fullName', '==', item.fullName),
+              where('nationalId', '==', item.nationalId)
+            ];
+            break;
+          case 'finances':
+            queryConstraints = [
+              where('expense', '==', item.expense),
+              where('amount', '==', item.amount),
+              where('date', '==', item.date)
+            ];
+            break;
+          default:
+            console.error(`Unsupported collection: ${collectionName}`);
+            continue;
+        }
+
+        const q = query(collectionRef, ...queryConstraints);
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const docRef = doc(db, collectionName, querySnapshot.docs[0].id);
+          await updateDoc(docRef, item);
+          updatedCount++;
+        } else {
+          await addDoc(collectionRef, item);
+          createdCount++;
+        }
+      }
+
+      setBackupStatus(prev => ({
+        ...prev,
+        [collectionName]: `Success: Updated ${updatedCount}, Created ${createdCount}, Deleted ${deletedCount}`
+      }));
+    } catch (error) {
+      console.error(`Error syncing ${collectionName} with Firestore:`, error);
+      setBackupStatus(prev => ({ ...prev, [collectionName]: 'Failed' }));
+    }
+  };
+
+  const handleBackup = async () => {
     setIsBackupInProgress(true);
-    const userInfo = getUserInfo();
+    setBackupStatus({});
+
     const members = getMembers();
     const finances = getFinances();
+
+    await syncCollectionToFirestore('members', members);
+    await syncCollectionToFirestore('finances', finances);
+
+    // Backup other data to localStorage
+    const userInfo = getUserInfo();
     const lastProjectId = getNextProjectId();
-    const backupData = {
-      userInfo,
-      members,
-      finances,
-      lastProjectId,
-    };
-    
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `hags-backup-${timestamp}.json`;
-    
-    downloadFile(filename, JSON.stringify(backupData));
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    localStorage.setItem('lastProjectId', lastProjectId);
+    localStorage.setItem('theme', theme);
+
     setIsBackupInProgress(false);
   };
 
   const handleRestore = async () => {
     setIsRestoreInProgress(true);
+    setRestoreStatus('Restoring data...');
+
     try {
-      const backupData = await uploadFile();
-      if (backupData) {
-        localStorage.setItem('userInfo', JSON.stringify(backupData.userInfo));
-        localStorage.setItem('hagsMembers', JSON.stringify(backupData.members));
-        localStorage.setItem('hagsFinances', JSON.stringify(backupData.finances));
-        localStorage.setItem('lastProjectId', backupData.lastProjectId);
-        navigate('/dashboard');
+      const collections = ['members', 'finances'];
+      let restoredData = {};
+
+      for (const collectionName of collections) {
+        const collectionRef = collection(db, collectionName);
+        const querySnapshot = await getDocs(collectionRef);
+        
+        restoredData[collectionName] = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
       }
+
+      // Update localStorage with restored data
+      localStorage.setItem('hagsMembers', JSON.stringify(restoredData.members));
+      localStorage.setItem('hagsFinances', JSON.stringify(restoredData.finances));
+
+      setRestoreStatus('Data restored successfully!');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Restore failed:', error);
+      setRestoreStatus('Failed to restore data from Firestore.');
     } finally {
       setIsRestoreInProgress(false);
     }
@@ -125,14 +211,14 @@ function Quick() {
             onClick={handleBackup}
             disabled={isBackupInProgress}
           >
-            {isBackupInProgress ? 'Backing up...' : 'Backup Data'}
+            {isBackupInProgress ? 'Backing up...' : 'Backup Data to Firestore'}
           </button>
           <button
             className="restore-button"
             onClick={handleRestore}
             disabled={isRestoreInProgress}
           >
-            {isRestoreInProgress ? 'Restoring...' : 'Restore Data'}
+            {isRestoreInProgress ? 'Restoring...' : 'Restore Data from Firestore'}
           </button>
           <button
             className="reports-button"
@@ -141,6 +227,19 @@ function Quick() {
             Generate Reports
           </button>
         </div>
+        {Object.keys(backupStatus).length > 0 && (
+          <div className="backup-status">
+            <h3>Backup Status:</h3>
+            {Object.entries(backupStatus).map(([collection, status]) => (
+              <p key={collection}>{collection}: {status}</p>
+            ))}
+          </div>
+        )}
+        {restoreStatus && (
+          <div className="restore-status">
+            <p>{restoreStatus}</p>
+          </div>
+        )}
         {isReportModalOpen && (
           <div className="report-modal">
             <div className="modal-content">
